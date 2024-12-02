@@ -2,7 +2,7 @@ import java.io.File
 import java.util.*
 import kotlin.math.abs
 
-fun part1(): Int {
+fun day01part1(): Int {
     val lines = File("day01.txt").readText().split("\n").filter { it.isNotBlank() }
 
     val A = PriorityQueue<Int>()
@@ -24,7 +24,7 @@ fun part1(): Int {
 }
 
 
-fun part2(): Int {
+fun day01part2(): Int {
     val lines = File("day01.txt").readText().split("\n").filter { it.isNotBlank() }
 
     val A = mutableMapOf<Int, Int>()
@@ -46,6 +46,6 @@ fun part2(): Int {
 }
 
 fun main() {
-    println(part1())
-    println(part2())
+    println(day01part1())
+    println(day01part2())
 }
