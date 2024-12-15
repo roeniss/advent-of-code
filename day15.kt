@@ -1,18 +1,13 @@
-import java.io.File
-
 private fun main() {
-    val (field, moves) = File("day15.txt").readText().dropLastWhile { it == '\n' }.split("\n\n")
-    val _field = field.split("\n").map { it.toCharArray().toMutableList() }.toMutableList()
-    val _moves = moves.replace("\n", "")
-//    println(day15part1(_field, _moves))
-    println(day15part2(_field, _moves))
+    val (field, moves) = getFile("day15.txt").split("\n\n")
+    println(day15part1(field.toMutable2DChars(), moves.replace("\n", "")))
+    println(day15part2(field.toMutable2DChars(), moves.replace("\n", "")))
 }
+
 
 private fun day15part2(field: MutableList<MutableList<Char>>, moves: String): Long {
     val field = scaleUp(field)
     var robot: Pair<Int, Int> = findRobotPos(field)
-
-//    draw(field)
 
     moves.forEach {
         val d: Pair<Int, Int> = getDirection(it)
@@ -23,18 +18,17 @@ private fun day15part2(field: MutableList<MutableList<Char>>, moves: String): Lo
                 move2((robot.first + d.first to robot.second + d.second), d, field)
                 field[robot.first][robot.second] = '.'
                 robot = robot.first + d.first to robot.second + d.second
-//                draw(field)
             }
         }
     }
 
-    draw(field)
+//    draw(field)
 
     return getGPS(field, '[')
 }
 
 private fun scaleUp(field: MutableList<MutableList<Char>>): MutableList<MutableList<Char>> {
-    val res: MutableList<MutableList<Char>> = mutableListOf(mutableListOf())
+    val res: MutableList<MutableList<Char>> = mutableListOf()
     field.forEach {
         val list = mutableListOf<Char>()
         it.forEach { cell ->
@@ -50,7 +44,7 @@ private fun scaleUp(field: MutableList<MutableList<Char>>): MutableList<MutableL
         }
         res.add(list)
     }
-    return res.subList(1, res.size - 1)
+    return res
 }
 
 private fun canGo(pos: Pair<Int, Int>, d: Pair<Int, Int>, field: MutableList<MutableList<Char>>): Boolean {
@@ -70,17 +64,17 @@ private fun canGo(pos: Pair<Int, Int>, d: Pair<Int, Int>, field: MutableList<Mut
 
 private fun move2(pos: Pair<Int, Int>, d: Pair<Int, Int>, field: MutableList<MutableList<Char>>) {
     // move self to next pos
-    val cell = field[pos.first ][pos.second ]
-    if(cell == '.'){
+    val cell = field[pos.first][pos.second]
+    if (cell == '.') {
         field[pos.first][pos.second] = field[pos.first - d.first][pos.second - d.second]
-    }else if (cell == '#'){
+    } else if (cell == '#') {
         throw Exception("Invalid move")
-    }else if (cell == '[') {
+    } else if (cell == '[') {
         move2(pos.first + d.first to pos.second + d.second, d, field)
         move2(pos.first + d.first to pos.second + d.second + 1, d, field)
         field[pos.first][pos.second] = field[pos.first - d.first][pos.second - d.second]
         field[pos.first][pos.second + 1] = '.'
-    }else if (cell == ']') {
+    } else if (cell == ']') {
         move2(pos.first + d.first to pos.second + d.second, d, field)
         move2(pos.first + d.first to pos.second + d.second - 1, d, field)
         field[pos.first][pos.second] = field[pos.first - d.first][pos.second - d.second]
@@ -100,14 +94,6 @@ private fun day15part1(field: MutableList<MutableList<Char>>, moves: String): Lo
     return getGPS(field, 'O')
 }
 
-private fun draw(field: MutableList<MutableList<Char>>) {
-    field.forEach { row ->
-        println(row.joinToString(""))
-    }
-
-    println()
-}
-
 private fun getGPS(field: MutableList<MutableList<Char>>, ch: Char): Long {
     return field.flatMapIndexed { i, row ->
         row.mapIndexed { j, cell ->
@@ -122,10 +108,6 @@ private fun getGPS(field: MutableList<MutableList<Char>>, ch: Char): Long {
 
 private fun MutableList<MutableList<Char>>.get(y: Int, x: Int): Char? {
     return this.getOrNull(y)?.getOrNull(x)?.let { if (it == '#') null else it }
-}
-
-private fun MutableList<MutableList<Char>>.canGo(y: Int, x: Int): Boolean {
-    return this.getOrNull(y)?.getOrNull(x) == '.'
 }
 
 private fun move(robot: Pair<Int, Int>, d: Pair<Int, Int>, field: MutableList<MutableList<Char>>): Pair<Int, Int> {
