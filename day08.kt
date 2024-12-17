@@ -1,9 +1,5 @@
 import java.io.File
 
-data class Pos(
-    val y: Int,
-    val x: Int,
-)
 
 fun collectAntennas(field: List<List<Char>>): Collection<List<Pos>> {
     return field
