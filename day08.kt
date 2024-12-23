@@ -1,7 +1,7 @@
 import java.io.File
 
 
-fun collectAntennas(field: List<List<Char>>): Collection<List<Pos>> {
+private fun collectAntennas(field: List<List<Char>>): Collection<List<Pos>> {
     return field
         .flatMapIndexed { y, row ->
             row.mapIndexed { x, cell ->
