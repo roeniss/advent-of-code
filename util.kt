@@ -10,7 +10,7 @@ data class Pos(
 )
 
 
-fun draw(field: MutableList<MutableList<Char>>) {
+fun <T> draw(field: MutableList<MutableList<T>>) {
     field.forEach { row ->
         BW.write(row.joinToString(""))
         BW.newLine()
